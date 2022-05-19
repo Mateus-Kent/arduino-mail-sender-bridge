@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
 import Mail from 'nodemailer/lib/mailer'
 import dotenv from 'dotenv'
+import { Response } from 'express'
 
 dotenv.config()
 
@@ -19,19 +20,21 @@ class MailController {
     })
   }
 
-  async sendMail(): Promise<void> {
+  async sendMail(res: Response) {
     await this.transporter.sendMail({
       to: {
         name: 'Mateus',
-        address: 'mateusquent2003@gmail.com',
+        address: String(process.env.MAIL_TO),
       },
       from: {
         name: 'Mateus23',
         address: 'mateus23@caixainteligente.com',
       },
       subject: 'Sua entrega chegou !',
-      html: '<h1>Sua caixa chegou verifique sua caixa de entrega</h1>',
+      html: '<h2>Sua entrega chegou verifique sua caixa de entrega</h2>',
     })
+
+    return res.status(200).send('The email is sending with success')
   }
 }
 
